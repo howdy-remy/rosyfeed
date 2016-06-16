@@ -1,0 +1,20 @@
+{
+  "name": "Tweet View",
+  "version": "1.0",
+  "description": "Chrome Extension for hiding negative tweets.",
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["jquery-3.0.0.min.js","content.js"]
+  }],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_title": "Title Changer"
+  },
+  "permissions": [
+    "activeTab", "tabs"
+  ],
+  "manifest_version": 2
+}
