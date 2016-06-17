@@ -1,22 +1,22 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var sentiment = require('sentiment');
+  var sentiment = require('sentiment');
 
+  chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+    if (msg.command && (msg.command == "update_tweet_view")) {    
 
-chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-  if (msg.command && (msg.command == "update_tweet_view")) {    
-    $('.tweet').each(function(){
-    	var text =  $(this).find('.tweet-text').text();
-      var score = sentiment(text).score.toString();
-      if(score < 0) {
-        score *= -1;
-        var blur = 'blur(' + score + 'px)';
-        $(this).css("-webkit-filter", blur);
-      }
-    	
-    });
+      $('.tweet').each(function(){
+      	var text =  $(this).find('.tweet-text').text();
+        var score = sentiment(text).score.toString();
+        if(score < 0) {
+          score *= -1;
+          var blur = 'blur(' + score + 'px)';
+          $(this).css("-webkit-filter", blur);
+        }
+      	
+      });
 
-  }
-});
+    }
+  });
 },{"sentiment":4}],2:[function(require,module,exports){
 /**
  * lodash (Custom Build) <https://lodash.com/>
