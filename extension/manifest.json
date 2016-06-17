@@ -1,9 +1,10 @@
 {
   "name": "Tweet View",
   "version": "1.0",
-  "description": "Chrome Extension for hiding negative tweets.",
+  "description": "Hide negative tweets in your feed.",
+  "icons": {"19": "active.png"},
   "content_scripts": [{
-    "matches": ["<all_urls>"],
+    "matches": ["http://twitter.com"],
     "js": ["jquery-3.0.0.min.js","bundle.js"]
   }],
   "background": {
@@ -11,10 +12,11 @@
     "persistent": false
   },
   "browser_action": {
-    "default_title": "Title Changer"
+    "default_title": "Tweet View",
+    "default_icon": "active.png"
   },
   "permissions": [
-    "activeTab", "tabs", "http://192.168.1.110/"
+    "activeTab"
   ],
   "manifest_version": 2
 }
