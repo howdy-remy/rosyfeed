@@ -1,0 +1,23 @@
+{
+  "name": "posneg_tweet_view",
+  "version": "1.0.0",
+  "description": "Chrome Extension to hide negative tweets in your Twitter feed.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kimber Lynch",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.14.0",
+    "morgan": "^1.7.0",
+    "nodemon": "^1.9.2",
+    "retext": "^2.0.0",
+    "retext-emoji": "^1.0.0",
+    "retext-sentiment": "^1.0.0",
+    "sentiment": "^1.0.6",
+    "unist-util-inspect": "^4.0.0"
+  }
+}

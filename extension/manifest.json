@@ -4,7 +4,7 @@
   "description": "Chrome Extension for hiding negative tweets.",
   "content_scripts": [{
     "matches": ["<all_urls>"],
-    "js": ["jquery-3.0.0.min.js","content.js"]
+    "js": ["jquery-3.0.0.min.js","bundle.js"]
   }],
   "background": {
     "scripts": ["background.js"],
@@ -14,7 +14,7 @@
     "default_title": "Title Changer"
   },
   "permissions": [
-    "activeTab", "tabs"
+    "activeTab", "tabs", "http://192.168.1.110/"
   ],
   "manifest_version": 2
 }
