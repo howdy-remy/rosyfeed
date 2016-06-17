@@ -21,3 +21,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 		});
 	}
 });
+
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if( request.message === "console" ) {
+      console.log(request.tweet);
+    }
+  }
+);
