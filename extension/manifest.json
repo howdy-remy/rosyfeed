@@ -4,7 +4,7 @@
   "description": "Hide negative tweets in your feed.",
   "icons": {"19": "active.png"},
   "content_scripts": [{
-    "matches": ["http://twitter.com"],
+    "matches": ["<all_urls>"],
     "js": ["jquery-3.0.0.min.js","bundle.js"]
   }],
   "background": {
