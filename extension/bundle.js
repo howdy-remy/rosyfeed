@@ -21,8 +21,39 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
 });
 
 function blur() {
-	if (location.href.search(/facebook/) > -1) return fbblur();
-	if (location.href.search(/twitter/) > -1)	return tweetblur();
+	if (location.href.search(/facebook\.com/) > -1) return fbblur();
+	if (location.href.search(/twitter\.com/) > -1)	return tweetblur();
+}
+
+function analyzeAndCss(text, parent, children){
+retext.use(retextSentiment).use(function () {
+			return function (tree) {
+				if (tree.data) {
+					score = tree.data.polarity;
+				}
+			};
+		}).process(text);
+
+		if (score < 0) {
+			score = (score - 2) * -1;
+			var blur = 'blur(' + score + 'px)';
+			$(children).css({ 'opacity': '0.25', '-webkit-filter': blur });
+			$(parent).hover(function () {
+				$(children).css({ 'opacity': '1', '-webkit-filter': 'blur(0)', '-webkit-transition': '-webkit-filter 1000ms linear, opacity 1000ms linear' });
+			}, function () {
+				$(children).css({ 'opacity': '0.25', '-webkit-filter': blur });
+			});
+		}
+}
+
+function tweetblur() {
+	$('.tweet').each(function () {
+		var tweetText = $(this).find('.tweet-text').text();
+		var children = $(this).children();
+		var score;
+
+		analyzeAndCss(tweetText, this, children);
+	});
 }
 
 function fbblur() {
@@ -30,24 +61,8 @@ function fbblur() {
 		var comment = $(this).find('.UFICommentBody').text();
 		var score;
 
-		retext.use(retextSentiment).use(function () {
-			return function (tree) {
-				if (tree.data) {
-					score = tree.data.polarity;
-				}
-			};
-		}).process(comment);
-
-		if (score < 0) {
-			score = (score - 2) * -1;
-			var blur = 'blur(' + score + 'px)';
-			$(this).css({ 'opacity': '0.25', '-webkit-filter': blur });
-			$(this).hover(function () {
-				$(this).css({ 'opacity': '1', '-webkit-filter': 'blur(0)', '-webkit-transition': '-webkit-filter 1000ms linear, opacity 1000ms linear' });
-			}, function () {
-				$(this).css({ 'opacity': '0.25', '-webkit-filter': blur });
-			});
-		}
+		analyzeAndCss(comment, this, this)
+		
 	});
 
 	$('.userContentWrapper ').each(function () {
@@ -56,69 +71,26 @@ function fbblur() {
 		var postText = post.text();
 		var score;
 
-		retext.use(retextSentiment).use(function () {
-			return function (tree) {
-				if (tree.data) {
-					score = tree.data.polarity;
-				}
-			};
-		}).process(postText);
+		analyzeAndCss(postText, post, post);
 
-		if (score < 0) {
-			score = (score - 2) * -1;
-			var blur = 'blur(' + score + 'px)';
-			$(post).css({ 'opacity': '0.25', '-webkit-filter': blur });
-			$(post).hover(function () {
-				$(post).css({ 'opacity': '1', '-webkit-filter': 'blur(0)', '-webkit-transition': '-webkit-filter 1000ms linear, opacity 1000ms linear' });
-			}, function () {
-				$(post).css({ 'opacity': '0.25', '-webkit-filter': blur });
-			});
-		}
-	});
-}
-// Using Sentiment library
-// function tweetblur() {
-// 	$('.tweet').each(function () {
-// 		var tweetText = $(this).find('.tweet-text').text();
-// 		var children = $(this).children();
-// 		var score = sentiment(tweetText).score.toString();
-// 		if (score < 0) {
-// 			score = (score - 2) * -1;
-// 			var blur = 'blur(' + score + 'px)';
-// 			$(children).css({ 'opacity': '0.25', '-webkit-filter': blur });
-// 			$(this).hover(function () {
-// 				$(children).css({ 'opacity': '1', '-webkit-filter': 'blur(0)', '-webkit-transition': '-webkit-filter 1000ms linear, opacity 1000ms linear' });
-// 			}, function () {
-// 				$(children).css({ 'opacity': '0.25', '-webkit-filter': blur });
-// 			});
-// 		}
-// 	});
-// }
+		// retext.use(retextSentiment).use(function () {
+		// 	return function (tree) {
+		// 		if (tree.data) {
+		// 			score = tree.data.polarity;
+		// 		}
+		// 	};
+		// }).process(postText);
 
-function tweetblur() {
-	$('.tweet').each(function () {
-		var tweetText = $(this).find('.tweet-text').text();
-		var children = $(this).children();
-		var score;
-
-		retext.use(retextSentiment).use(function () {
-			return function (tree) {
-				if (tree.data) {
-					score = tree.data.polarity;
-				}
-			};
-		}).process(tweetText);
-
-		if (score < 0) {
-			score = (score - 2) * -1;
-			var blur = 'blur(' + score + 'px)';
-			$(children).css({ 'opacity': '0.25', '-webkit-filter': blur });
-			$(this).hover(function () {
-				$(children).css({ 'opacity': '1', '-webkit-filter': 'blur(0)', '-webkit-transition': '-webkit-filter 1000ms linear, opacity 1000ms linear' });
-			}, function () {
-				$(children).css({ 'opacity': '0.25', '-webkit-filter': blur });
-			});
-		}
+		// if (score < 0) {
+		// 	score = (score - 2) * -1;
+		// 	var blur = 'blur(' + score + 'px)';
+		// 	$(post).css({ 'opacity': '0.25', '-webkit-filter': blur });
+		// 	$(post).hover(function () {
+		// 		$(post).css({ 'opacity': '1', '-webkit-filter': 'blur(0)', '-webkit-transition': '-webkit-filter 1000ms linear, opacity 1000ms linear' });
+		// 	}, function () {
+		// 		$(post).css({ 'opacity': '0.25', '-webkit-filter': blur });
+		// 	});
+		// }
 	});
 }
 
