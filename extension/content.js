@@ -7,24 +7,13 @@ var retextSentiment = require('retext-sentiment');
 
 var retext = new Retext();
 
-
-//CUSTOM POLARITY SETTINGS
-//Setting
-	//get input as message from popup
-	//send to local chrome storage?
-
-//Retrieving
-	//retrieve stored options from chrome storage
-	chrome.storage.sync.get(null, function (items){
-		for(var key in items) items[key] = Number(items[key]);
-			console.log(items);
-		//apply to retext
-		retext.use(retextSentiment, items);
-		//send to popup.js to be displayed
-	});
+chrome.storage.sync.get(null, function (items){
+	for(var key in items) items[key] = Number(items[key]);
+	console.log(items);
+	retext.use(retextSentiment, items);
+});
 
 chrome.storage.onChanged.addListener(function(changes){
-	console.log('changed!', changes);
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.update(tabs[0].id, {url: tabs[0].url});
   });
@@ -33,6 +22,7 @@ chrome.storage.onChanged.addListener(function(changes){
 //APPLYING/REMOVING BLURS
 //listen for messages to apply/remove blurring effect
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+	console.log('msg', msg);
 	if (msg.command && (msg.command == "set_blur")) {
 		blur();
 		$(window).on('scroll', _.debounce(function () {
@@ -112,9 +102,3 @@ function unblur() {
 	});
 
 }
-
-
-// new Retext().use(sentiment, {
-//     'cat': -3,
-//     'dog': 3
-// });
