@@ -7,29 +7,21 @@ var inspect = require('unist-util-inspect');
 var retextSentiment = require('retext-sentiment');
 
 var retext = new Retext();
+var customWords = [];
 
 chrome.storage.sync.get(null, function (items){
 	for(var key in items) items[key] = Number(items[key]);
-	console.log(items);
-	retext.use(retextSentiment, items);
-});
-
-chrome.storage.onChanged.addListener(function(changes){
-	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.update(tabs[0].id, {url: tabs[0].url});
-  });
+	customWords = items;
 });
 
 //APPLYING/REMOVING BLURS
 //listen for messages to apply/remove blurring effect
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
-	console.log('msg', msg);
 	if (msg.command && (msg.command == "set_blur")) {
 		blur();
 		$(window).on('scroll', _.debounce(function () {
 			blur();
 		}, 500));
-
 	} else if (msg.command && (msg.command == "set_unblur")) {
 		unblur();
 		$(window).off('scroll');
@@ -43,7 +35,7 @@ function blur() {
 }
 
 function analyzeAndCss(text, parent, children) {
-	retext.use(retextSentiment).use(function () {
+	retext.use(retextSentiment, customWords).use(function () {
 		return function (tree) {
 			if (tree.data) {
 				score = tree.data.polarity;
